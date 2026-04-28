@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deteksi Uang</title>
+</head>
+<body style="text-align:center; font-family:sans-serif;">
+
+  <h2>Scan Uang</h2>
+
+  <video id="video" width="300" height="200" autoplay playsinline></video><br><br>
+
+  <button onclick="takePhoto()">Ambil Foto</button>
+
+  <canvas id="canvas" width="300" height="200" style="display:none;"></canvas>
+
+  <h3 id="hasil">Hasil: -</h3>
+
+  <script>
+    const video = document.getElementById('video');
+
+    // ✅ pakai kamera belakang
+    navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: { ideal: "environment" }
+      }
+    })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(err => {
+      console.log("Error kamera:", err);
+      alert("Kamera tidak bisa dibuka");
+    });
+
+    function takePhoto() {
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      context.drawImage(video, 0, 0, 300, 200);
+
+      // sementara masih manual (belum AI)
+      document.getElementById("hasil").innerText = "Hasil: 10 Ribu Rupiah";
+
+      const msg = new SpeechSynthesisUtterance("Sepuluh ribu rupiah");
+      speechSynthesis.speak(msg);
+    }
+  </script>
+
+</body>
+</html>
